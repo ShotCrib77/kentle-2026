@@ -44,7 +44,6 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
                 }
             });
             const data = await resTracks.json();
-            console.log("Whatdahelliiswrong", data)
             const shuffled = shuffleTracks(data.items.map((item: SpotifyPlaylistItem) => item.track));
             setTracks(shuffled);
         };
@@ -54,6 +53,10 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
 
     const nextTrack = () => {
         if (!tracks.length) return;
+        if (trackIndex >= tracks.length) {
+            console.warn('nextTrack: trackIndex out of bounds');
+            return;
+        }
         const track = tracks[trackIndex];
         setCurrentTrack(track);
         console.log("Track URI", track.uri);

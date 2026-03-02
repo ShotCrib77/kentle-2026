@@ -22,42 +22,58 @@ export default function useSpotifyPlayer() {
             const { accessToken } = await res.json();
             accessTokenRef.current = accessToken;
 
+            // Handler functions so we can remove listeners on cleanup
+            const handlePlayerStateChanged = (state: unknown) => {
+                if (!state) return;
+                const s = state as { paused: boolean; position: number };
+                setIsPaused(s.paused);
+                posInSongRef.current = s.position;
+            };
+
+            const handleReady = ({ device_id }: { device_id: string }) => {
+                setDeviceId(device_id);
+                setIsReady(true);
+
+                // Transfer playback to the SDK device (do not auto-play)
+                fetch('https://api.spotify.com/v1/me/player', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessTokenRef.current}`
+                    },
+                    body: JSON.stringify({
+                        device_ids: [device_id],
+                        play: false
+                    })
+                }).catch(err => console.error('Failed to set active device', err));
+            };
+
             window.onSpotifyWebPlaybackSDKReady = () => {
                 const spotifyPlayer = new window.Spotify.Player({
                     name: "Guess The Song Player",
-                    getOAuthToken: (cb) => { cb(accessTokenRef.current ?? ""); },
+                    getOAuthToken: async (cb: (token: string) => void) => {
+                        try {
+                            if (!accessTokenRef.current) {
+                                const res = await fetch('/api/auth/token');
+                                const json = await res.json();
+                                accessTokenRef.current = json.accessToken;
+                            }
+                        } catch (err) {
+                            console.error('Failed to refresh access token', err);
+                        }
+                        cb(accessTokenRef.current ?? "");
+                    },
                     volume: 0.25
                 });
 
-                spotifyPlayer.addListener("player_state_changed", (state) => {
-                    if (!state) return;
-                    setIsPaused(state.paused);
-                    posInSongRef.current = state.position;
-                });
-
-                spotifyPlayer.addListener("ready", ({ device_id }) => {
-                    setDeviceId(device_id)
-                    setIsReady(true);
-
-                    fetch('https://api.spotify.com/v1/me/player', {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${accessTokenRef.current}`
-                        },
-                        body: JSON.stringify({
-                            device_ids: [device_id],
-                            play: false
-                        })
-                    });
-                });
+                spotifyPlayer.addListener('player_state_changed', handlePlayerStateChanged);
+                spotifyPlayer.addListener('ready', handleReady);
 
                 playerRef.current = spotifyPlayer;
-                spotifyPlayer.connect().then(success => {
-                    if (success) {
-                        console.log("The Web Playback SDK connected successfully.")
-                    }
-                });
+                spotifyPlayer.connect().then((success) => {
+                    if (success) console.log('The Web Playback SDK connected successfully.');
+                    else console.warn('The Web Playback SDK failed to connect.');
+                }).catch((err: unknown) => console.error('Player connect error', err));
             };
 
             // Check if Spotify script tag already initialized  
@@ -73,10 +89,34 @@ export default function useSpotifyPlayer() {
         init();
 
         return () => {
-            playerRef.current?.disconnect();
+            if (playerRef.current) {
+                try {
+                    playerRef.current.removeListener('player_state_changed');
+                    playerRef.current.removeListener('ready');
+                } catch {
+                    // ignore
+                }
+                try {
+                    playerRef.current.disconnect();
+                } catch {
+                    // ignore
+                }
+            }
+
             if (script) {
                 document.body.removeChild(script);
             }
+
+            try {
+                // clear the global SDK ready handler we assigned
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                window.onSpotifyWebPlaybackSDKReady = undefined;
+            } catch {
+                // ignore
+            }
+
+            
         };
     }, []);
     
