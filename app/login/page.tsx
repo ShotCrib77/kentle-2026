@@ -31,8 +31,8 @@ export default function Login() {
     }
 
     return (
-        <main>
-            <button onClick={redirToSpotify}>Login to Spotify</button>
+        <main className="bg-bg-black h-screen w-full flex flex-col justify-center items-center">
+            <button className="bg-green-500 hover:bg-green-600 cursor-pointer px-12 py-4 rounded-full text-3xl" onClick={redirToSpotify}>Login to Spotify</button>
         </main>
     );
 }
