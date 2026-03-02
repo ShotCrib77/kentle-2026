@@ -7,8 +7,6 @@ export default function Login() {
         
         const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
         const redirect_uri = process.env.NEXT_PUBLIC_REDIRECT_URI;
-        console.log("Client ID:", clientId);
-        console.log("Redirect URI:", redirect_uri);
         if (!clientId || !redirect_uri) throw new Error("Missing Spotify client ID or redirect uri in enviroment");
         
         const codeVerifier = createCodeVerifier();

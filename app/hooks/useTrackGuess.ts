@@ -61,7 +61,6 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
         }
         const track = tracks[trackIndex];
         setCurrentTrack(track);
-        console.log("Track URI", track.uri);
         loadTrack(track.uri);
         setTrackIndex(prev => prev + 1);
     }
@@ -93,7 +92,6 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
         const input = inputStates.find((input) => input.id === id);
         
         if (!input || !input.value.trim()) return;
-        console.log("Input value, current track", input.value, currentTrack?.name);
 
         if (input.value.toLowerCase().trim() === currentTrack?.name.toLowerCase()) {
             setPoints(prev => prev + (5 - input.id) * 1000);
