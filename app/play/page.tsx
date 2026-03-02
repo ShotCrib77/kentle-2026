@@ -33,7 +33,7 @@ export default function Play() {
     const dataListSongs = inputStates[currentGuess - 1].value.length >= 3 ? trackNames.filter(name => name.toLowerCase().includes(inputStates[currentGuess - 1].value.toLowerCase())) : []
 
     return (
-        <main className="bg-bg-black min-h-screen w-full flex flex-col justify-center items-center">
+        <main className="bg-bg-black min-h-screen w-full flex flex-col justify-center items-center p-16">
             {!isReady ? (
                 <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
@@ -116,7 +116,7 @@ export default function Play() {
                                     </button>
                                 </div>
                             ) : (
-                                    <button
+                                <button
                                     className="bg-orange-400 hover:bg-orange-500 text-white font-semibold px-6 py-2 rounded-full mt-2 cursor-pointer"
                                     onClick={() => setViewResults(true)}
                                 >
@@ -133,7 +133,7 @@ export default function Play() {
                                 onClick={() => {}}
                             />
 
-                            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white bg-[#111111] rounded-lg p-20 shadow-2xl flex flex-col ">
+                            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white bg-[#111111] rounded-lg p-20 shadow-2xl flex flex-col z-10">
                                 <div className="flex flex-col justify-center items-center">
                                     <span className="text-lg">Total poäng:</span> 
                                     <span className="text-3xl">{points}</span>

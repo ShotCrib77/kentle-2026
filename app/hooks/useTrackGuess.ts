@@ -82,6 +82,7 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
 
     const handleResetGame = () => {
         handleNextSong();
+        setPoints(0);
         setCurrentRound(1);
     }
 
@@ -96,6 +97,7 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
             setPoints(prev => prev + (5 - input.id) * 1000);
             setHasWon(true);
             setRoundFinished(true);
+            setInputStates(prev => prev.map(f => f.id === id ? { ...f, readOnly: true, submited: true } : f));
         } else {
             // Setting the inputs to readonly after a guess has been submited
             setInputStates(prev => prev.map(f => {

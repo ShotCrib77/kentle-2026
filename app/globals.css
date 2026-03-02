@@ -1,22 +1,81 @@
 @import "tailwindcss";
 
+
+@theme {
+  --breakpoint-xs: 500px;
+}
+
 :root {
   --background: #262626;
   --foreground: #fefefe;
   --bg-black: #333;
   --highlights: #ff8904;
+
+  /* Fonts from your Vite setup */
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Only the Vite colors you want to keep */
+  --primary: 33 100% 51%;
+  --primary-foreground: 0 0% 100%;
+
+  --muted-foreground: 0 0% 64%;
+
+  --card: 0 0% 20%;
+  --card-foreground: 0 0% 99%;
+  
+  --border: 0 0% 26%;
+
+  /* Radius from Vite */
+  --radius: 0.75rem;
+
+  
 }
 
 @theme inline {
+  /* Next.js colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-bg-black: var(--bg-black);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* Vite colors you want to keep */
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-border: hsl(var(--border));
+
+  /* Radius */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Fonts */
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
 }
