@@ -5,8 +5,7 @@ import useTrackGuess from "../hooks/useTrackGuess";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import PlayButton from "../components/PlayButton";
-
-const feedbackTextArray = ["+20 Sekunder", "Albumbild!", "Refräng och +30 Sekunder" ]
+import { FEEDBACK_TEXTS } from "../lib/gameConfig";
 
 export default function Play() {
     const { isReady, isPaused, timeLimit, posInSongRef, togglePlay, loadTrack, triggerNextGuess, handleNextSongSpotifyPlayer } = useSpotifyPlayer();
@@ -86,7 +85,7 @@ export default function Play() {
 
                                 {submited && !(hasWon && id === currentGuess ) && id !== 4 && (
                                     <span className="text-orange-400 text-md py-1">
-                                        {feedbackTextArray[id - 1]}
+                                        {FEEDBACK_TEXTS[id - 1]}
                                     </span>
                                 )}
                             </div>

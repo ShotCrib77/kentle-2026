@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+const PLAYLIST_ID = process.env.NEXT_PUBLIC_SPOTIFY_PLAYLIST_ID;
+
 interface InputField {
   id: number;
   value: string;
@@ -38,7 +40,7 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
             const resToken = await fetch("/api/auth/token");
             const { accessToken } = await resToken.json();
 
-            const resTracks = await fetch('https://api.spotify.com/v1/playlists/6y6UPhLSKetBIV1aiqxSNS/tracks', {
+            const resTracks = await fetch(`https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks`, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -118,7 +120,6 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
             }
         }
     }
-    
 
     return { inputStates, currentRound, currentGuess, points, tracks, currentTrack, hasWon, roundFinished, handleChange, submitGuess, nextTrack, handleNextSong, handleResetGame};
 }

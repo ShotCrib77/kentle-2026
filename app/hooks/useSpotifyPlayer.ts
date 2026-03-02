@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { INITIAL_TIME_LIMIT_MS, GUESS2_TIME_LIMIT_MS, GUESS3_TIME_LIMIT_MS, GUESS3_SEEK_MS, PLAYER_VOLUME } from "../lib/gameConfig";
 
 export default function useSpotifyPlayer() {
     const [startAt, setStartAt] = useState(0);
-    const [timeLimit, setTimeLimit] = useState(10 * 1000)
+    const [timeLimit, setTimeLimit] = useState(INITIAL_TIME_LIMIT_MS)
     const [isPaused, setIsPaused] = useState(true);
     const [isReady, setIsReady] = useState(false);
     const [deviceId, setDeviceId] = useState("")
@@ -63,7 +64,7 @@ export default function useSpotifyPlayer() {
                         }
                         cb(accessTokenRef.current ?? "");
                     },
-                    volume: 0.25
+                    volume: PLAYER_VOLUME
                 });
 
                 spotifyPlayer.addListener('player_state_changed', handlePlayerStateChanged);
@@ -144,11 +145,11 @@ export default function useSpotifyPlayer() {
         playerRef.current.pause();
 
         if (guess === 1) {
-            setTimeLimit(30 * 1000)
+            setTimeLimit(GUESS2_TIME_LIMIT_MS);
         } else if (guess === 3) {
-            playerRef.current.seek(60 * 1000);
-            setStartAt(60 * 1000)
-            setTimeLimit(60 * 1000 * 2);
+            playerRef.current.seek(GUESS3_SEEK_MS);
+            setStartAt(GUESS3_SEEK_MS);
+            setTimeLimit(GUESS3_TIME_LIMIT_MS);
         }
     }
 
@@ -174,7 +175,7 @@ export default function useSpotifyPlayer() {
     const handleNextSongSpotifyPlayer = () => {
         playerRef.current?.pause()
         setStartAt(0);
-        setTimeLimit(10 * 1000);
+        setTimeLimit(INITIAL_TIME_LIMIT_MS);
         playerRef.current?.seek(0);
         posInSongRef.current = 0;
     }
