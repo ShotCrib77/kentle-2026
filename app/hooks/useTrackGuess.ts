@@ -29,7 +29,14 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
     const [hasWon, setHasWon] = useState(false);
     const [roundFinished, setRoundFinished] = useState(false)
 
-    const shuffleTracks = (tracks: SpotifyTrack[]) => [...tracks].sort(() => Math.random() - 0.5);
+    const shuffleTracks = (tracks: SpotifyTrack[]): SpotifyTrack[] => {
+        const arr = [...tracks];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    };
     
     const handleChange = (id: number, newValue: string) => {
         setInputStates(prev => prev.map(f => f.id === id ? { ...f, value: newValue } : f));
