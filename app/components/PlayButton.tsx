@@ -11,7 +11,7 @@ type PlayButtonProps = {
 export default function PlayButton({ timeLimit, posInSongRef, isPaused, togglePlay }: PlayButtonProps) {
     const [progress, setProgress] = useState<number>(0);
 
-    const size: number = 64;
+    const size: number = 56;
     const strokeWidth: number = 4;
     const radius: number = (size - strokeWidth) / 2;
     const circumference: number = 2 * Math.PI * radius;
@@ -70,7 +70,7 @@ export default function PlayButton({ timeLimit, posInSongRef, isPaused, togglePl
 
             <button
                 onClick={togglePlay}
-                className="bg-orange-400 rounded-full w-12 h-12 text-2xl lg:w-14 lg:h-14 lg:text-3xl 
+                className="bg-orange-400 rounded-full w-10 h-10 text-2xl lg:w-12 lg:h-12 lg:text-3xl 
                             flex justify-center items-center cursor-pointer hover:bg-orange-500 z-10"
             >
                 {isPaused ? <FaPlay /> : <FaPause />}

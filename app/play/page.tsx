@@ -5,6 +5,8 @@ import useTrackGuess from "../hooks/useTrackGuess";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import PlayButton from "../components/PlayButton";
+import { Music } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { FEEDBACK_TEXTS } from "../lib/gameConfig";
 
 export default function Play() {
@@ -56,39 +58,79 @@ export default function Play() {
                             {currentRound}/5
                         </span>
                     </div>
-                    {currentGuess > 2 ? (
-                        <div className="relative w-52 h-52 lg:w-64 lg:h-64 xl:w-72 xl:h-72">
-                            <Image src={currentTrack!.album.images[0].url} alt={`Cover image for ${currentTrack?.album.name}`} fill />
-                        </div>
-                    ) : (
-                        <span className="w-52 h-52 lg:w-64 lg:h-64 xl:w-72 xl:h-72 bg-zinc-400 rounded flex justify-center items-center text-center text-6xl">?</span>
-                    )}
+                    <motion.div
+                        key={`art-${currentRound}-${currentGuess > 2 ? "show" : "hide"}`}
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.4 }}
+                        className="relative"
+                    >
+                        {currentGuess > 2 ? (
+                            <div className="w-52 h-52 lg:w-64 lg:h-64 rounded-2xl overflow-hidden shadow-2xl shadow-primary/10 border border-border">
+                                <Image
+                                    src={currentTrack!.album.images[0].url}
+                                    alt={`Cover for ${currentTrack?.album.name}`}
+                                    className="w-full h-full object-cover"
+                                    fill
+                                />
+                            </div>
+                        ) : (
+                            <div className="w-52 h-52 lg:w-64 lg:h-64 bg-background rounded-2xl border border-border flex flex-col justify-center items-center gap-3 shadow-xl">
+                                <Music className="w-12 h-12 text-muted-foreground/40" />
+                            </div>
+                        )}
+                    </motion.div>
 
                     <PlayButton timeLimit={timeLimit} posInSongRef={posInSongRef} isPaused={isPaused} togglePlay={togglePlay}/>
 
-                    <div className="flex flex-col gap-4">
-                        {inputStates.map(({id, value, readOnly, submited}) => (
-                            <div key={id} className="flex flex-col gap-2 justify-center items-center">
-                                <input 
-                                    type="text"
-                                    list="song-suggestions"
-                                    value={value}
-                                    disabled={readOnly}
-                                    placeholder={!readOnly ? "Enter your guess..." : ""}
-                                    readOnly={readOnly}
-                                    onChange={(e) => handleChange(id, e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter") submitGuess(id);
-                                    }}
-                                    className={`w-72 lg:w-80 xl:w-92 h-12 rounded-xl outline-0 text-black px-4 text-xl text-center overflow-x-scroll ${hasWon && id === currentGuess ? "bg-green-400" : submited ? "bg-[#B8B8B8]" : "bg-white"}`}
-                                />
-
-                                {submited && !(hasWon && id === currentGuess ) && id !== 4 && (
-                                    <span className="text-orange-400 text-md py-1">
-                                        {FEEDBACK_TEXTS[id - 1]}
+                    <div className="flex flex-col gap-3 w-82">
+                        {inputStates.map(({ id, value, readOnly, submited }) => (
+                            <motion.div
+                                key={id}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: id * 0.05 }}
+                                className="flex flex-col items-center gap-1.5"
+                            >
+                                <div className="relative w-full">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-heading text-muted-foreground/50 w-5 text-center pointer-events-none select-none">
+                                        {id}
                                     </span>
-                                )}
-                            </div>
+                                    <input
+                                        type="text"
+                                        list="song-suggestions"
+                                        value={value}
+                                        disabled={readOnly}
+                                        placeholder={!readOnly ? "Skriv din gissning..." : ""}
+                                        readOnly={readOnly}
+                                        onChange={(e) => handleChange(id, e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") submitGuess(id);
+                                        }}
+                                        className={`bg-[#262626] w-full h-12 rounded-xl pl-10 pr-10 text-center font-body text-base outline-none transition-all duration-200 ${
+                                            hasWon && id === currentGuess
+                                                ? "bg-green-500/20 text-green-400 border-2 border-green-500/40 font-semibold"
+                                                : submited
+                                                ? "bg-secondary text-muted-foreground border border-border"
+                                                : readOnly
+                                                ? "bg-secondary/50 text-muted-foreground/30 border border-border/50"
+                                                : "text-foreground border-2 border-primary/40 focus:border-primary shadow-md shadow-primary/5"
+                                        }`}
+                                    />
+                                </div>
+                                <AnimatePresence>
+                                    {submited && !(hasWon && id === currentGuess) && id !== 4 && (
+                                        <motion.span
+                                            initial={{ opacity: 0, y: -5 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0 }}
+                                            className="text-primary text-sm font-heading"
+                                        >
+                                            {FEEDBACK_TEXTS[id - 1]}
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
+                            </motion.div>
                         ))}
                     </div>
                     <datalist id="song-suggestions">

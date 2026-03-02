@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { INITIAL_TIME_LIMIT_MS, GUESS2_TIME_LIMIT_MS, GUESS3_TIME_LIMIT_MS, GUESS3_SEEK_MS, PLAYER_VOLUME } from "../lib/gameConfig";
+import { INITIAL_TIME_LIMIT_MS, GUESS2_TIME_LIMIT_MS, GUESS2_SEEK_MS, GUESS3_TIME_LIMIT_MS, GUESS3_SEEK_MS, PLAYER_VOLUME } from "../lib/gameConfig";
 
 export default function useSpotifyPlayer() {
     const [startAt, setStartAt] = useState(0);
@@ -147,9 +147,8 @@ export default function useSpotifyPlayer() {
         if (guess === 1) {
             setTimeLimit(GUESS2_TIME_LIMIT_MS);
         } else if (guess === 3) {
-            playerRef.current.seek(GUESS3_SEEK_MS);
-            setStartAt(GUESS3_SEEK_MS);
             setTimeLimit(GUESS3_TIME_LIMIT_MS);
+            playerRef.current.seek(GUESS3_SEEK_MS);
         }
     }
 
