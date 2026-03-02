@@ -1,4 +1,4 @@
+.env.runtime
 node_modules
 .next
 .git
-.env
