@@ -53,6 +53,7 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
                 }
             });
             const data = await resTracks.json();
+            console.log("Fetched playlist tracks:", data.items);
             const shuffled = shuffleTracks(data.items.map((item: SpotifyPlaylistItem) => item.track));
             setTracks(shuffled);
         };
