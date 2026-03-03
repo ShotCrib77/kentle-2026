@@ -47,7 +47,7 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
             const resToken = await fetch("/api/auth/token");
             const { accessToken } = await resToken.json();
 
-            const resTracks = await fetch(`https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks`, {
+            const resTracks = await fetch(`https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/items`, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
