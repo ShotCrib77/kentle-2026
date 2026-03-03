@@ -47,17 +47,36 @@ export default function useTrackGuess(loadTrack: (uri: string) => void, triggerN
             const resToken = await fetch("/api/auth/token");
             const { accessToken } = await resToken.json();
 
-            const resTracks = await fetch(`https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/items`, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-            const data = await resTracks.json();
-            console.log("Fetched playlist tracks:", data.items);
-            const shuffled = shuffleTracks(data.items.map((item: SpotifyPlaylistItem) => item.track));
+            const first = await fetch(
+                `https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/items?limit=10&offset=0`,
+                { headers: { Authorization: `Bearer ${accessToken}` } }
+            );
+            const firstData = await first.json();
+            const total = firstData.total;
+
+            const offsets = Array.from(
+                { length: Math.ceil(total / 10) - 1 },
+                (_, i) => (i + 1) * 10
+            );
+
+            const pages = await Promise.all(
+                offsets.map(offset =>
+                fetch(
+                    `https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/items?limit=10&offset=${offset}`,
+                    { headers: { Authorization: `Bearer ${accessToken}` } }
+                ).then(r => r.json())
+                )
+            );
+
+            const allItems = [
+                ...firstData.items,
+                ...pages.flatMap(p => p.items)
+            ];
+
+            const shuffled = shuffleTracks(allItems.map(item => item.track));
+            console.log("Fetched and shuffled tracks:", shuffled, "Total tracks:", shuffled.length, "Original:", allItems);
             setTracks(shuffled);
         };
-
         fetchPlaylist();
     }, []);
 
