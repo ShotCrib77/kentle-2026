@@ -174,9 +174,9 @@ export default function Play() {
                                 onClick={() => {}}
                             />
 
-                            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white bg-[#111111] rounded-lg p-20 shadow-2xl flex flex-col z-10">
+                            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white bg-[#111111] rounded-lg p-12 lg:p-20 shadow-2xl flex flex-col z-10">
                                 <div className="flex flex-col justify-center items-center">
-                                    <span className="text-lg">Total poäng:</span> 
+                                    <span className="text-lg">Poäng:</span> 
                                     <span className="text-3xl">{points}</span>
                                 </div>
 
