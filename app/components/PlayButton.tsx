@@ -70,7 +70,7 @@ export default function PlayButton({ timeLimit, posInSongRef, isPaused, togglePl
 
             <button
                 onClick={togglePlay}
-                className="bg-orange-400 rounded-full w-10 h-10 text-2xl lg:w-12 lg:h-12 lg:text-3xl 
+                className="bg-orange-400 rounded-full w-10 h-10 text-2xl lg:text-2xl 
                             flex justify-center items-center cursor-pointer hover:bg-orange-500 z-10"
             >
                 {isPaused ? <FaPlay /> : <FaPause />}
