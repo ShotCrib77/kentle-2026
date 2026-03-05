@@ -105,7 +105,6 @@ export default function useSpotifyPlayer() {
             }
 
             try {
-                // @ts-expect-error error
                 window.onSpotifyWebPlaybackSDKReady = undefined;
             } catch { }
         };

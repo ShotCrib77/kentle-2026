@@ -1,5 +1,5 @@
 interface Window {
-  onSpotifyWebPlaybackSDKReady: () => void;
+  onSpotifyWebPlaybackSDKReady: (() => void) | undefined;
   Spotify: {
     Player: new (options: {
       name: string;
@@ -35,3 +35,4 @@ interface SpotifyTrack {
 interface SpotifyPlaylistItem {
   track: SpotifyTrack;
 }
+
