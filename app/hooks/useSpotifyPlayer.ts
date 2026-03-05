@@ -13,6 +13,7 @@ export default function useSpotifyPlayer() {
     const playerRef = useRef<SpotifyPlayer | null>(null);
     const accessTokenRef = useRef<string | null>(null);
     const posInSongRef = useRef<number>(0);
+    const hasLoadedTrack = useRef(false);
 
     useEffect(() => {
         const scriptId = "spotify-sdk";
@@ -23,7 +24,6 @@ export default function useSpotifyPlayer() {
             const { accessToken } = await res.json();
             accessTokenRef.current = accessToken;
 
-            // Handler functions so we can remove listeners on cleanup
             const handlePlayerStateChanged = (state: unknown) => {
                 if (!state) return;
                 const s = state as { paused: boolean; position: number };
@@ -35,18 +35,19 @@ export default function useSpotifyPlayer() {
                 setDeviceId(device_id);
                 setIsReady(true);
 
-                // Transfer playback to the SDK device (do not auto-play)
-                fetch('https://api.spotify.com/v1/me/player', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${accessTokenRef.current}`
-                    },
-                    body: JSON.stringify({
-                        device_ids: [device_id],
-                        play: false
-                    })
-                }).catch(err => console.error('Failed to set active device', err));
+                if (!hasLoadedTrack.current) {
+                    fetch('https://api.spotify.com/v1/me/player', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${accessTokenRef.current}`
+                        },
+                        body: JSON.stringify({
+                            device_ids: [device_id],
+                            play: false
+                        })
+                    }).catch(err => console.error('Failed to set active device', err));
+                }
             };
 
             window.onSpotifyWebPlaybackSDKReady = () => {
@@ -77,7 +78,6 @@ export default function useSpotifyPlayer() {
                 }).catch((err: unknown) => console.error('Player connect error', err));
             };
 
-            // Check if Spotify script tag already initialized  
             if (!document.getElementById(scriptId)) {
                 script = document.createElement("script");
                 script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -94,14 +94,10 @@ export default function useSpotifyPlayer() {
                 try {
                     playerRef.current.removeListener('player_state_changed');
                     playerRef.current.removeListener('ready');
-                } catch {
-                    // ignore
-                }
+                } catch { }
                 try {
                     playerRef.current.disconnect();
-                } catch {
-                    // ignore
-                }
+                } catch { }
             }
 
             if (script) {
@@ -109,15 +105,9 @@ export default function useSpotifyPlayer() {
             }
 
             try {
-                // clear the global SDK ready handler we assigned
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
+                // @ts-expect-error error
                 window.onSpotifyWebPlaybackSDKReady = undefined;
-            } catch {
-                // ignore
-            }
-
-            
+            } catch { }
         };
     }, []);
     
@@ -158,6 +148,7 @@ export default function useSpotifyPlayer() {
     }
 
     const loadTrack = async (trackUri: string, positionMs: number = 0) => {
+        hasLoadedTrack.current = true;
         await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
             method: 'PUT',
             headers: {
