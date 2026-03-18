@@ -29,7 +29,7 @@ Connect to your Spotify (premium) account. Then you can play a music quiz where,
 ### Installation
 ```bash
 git clone https://github.com/ShotCrib77/kentle-2026 kentle
-cd dulolytics
+cd kentle
 cp .env.build.example .env.build
 cp .env.runtime.example .env.runtime
 docker build -t kentle .
