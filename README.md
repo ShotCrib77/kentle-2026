@@ -3,7 +3,12 @@ A music quiz app with Kent theme, songs gotten with Spotift API
 Available at: [kentle.shotcrib.com](https://kentle.shotcrib.com)
 --------------------------------------------------------------------
 ## Demo
-![demo](./docs/demo.gif)
+![demo](./docs/kentle-demo.gif)
+
+## Screenshots
+| Start | End | Results |
+|------|-------|---------|
+| ![Start](./docs/kentle.png) | ![End](./docs/kentle-round-finished.png) | ![Results](./docs/kentle-result.png) |
 
 ## Overview
 Connect to your Spotify (premium) account. Then you can play a music quiz where, for each guess, it gets little bit easier, but you recive less points. Play 5 rounds and try to get a perfect score of 10 000 points!
