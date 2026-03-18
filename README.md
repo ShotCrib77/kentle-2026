@@ -1,5 +1,5 @@
 # Kentle
-A music quiz app with Kent theme, songs gotten with Spotift API
+A music quiz app with Kent theme, songs gotten with Spotift API.
 Available at: [kentle.shotcrib.com](https://kentle.shotcrib.com)
 --------------------------------------------------------------------
 ## Demo
@@ -15,7 +15,7 @@ Connect to your Spotify (premium) account. Then you can play a music quiz where,
 ![Nginx](https://img.shields.io/badge/Nginx-009639?logo=nginx&logoColor=white)
 
 ## Data
-![Spotify](https://img.shields.io/badge/Spotify%20API-1DB954?logo=spotify&logoColor=white)
+![Spotify](https://img.shields.io/badge/Spotify%20Web%20SDK-1DB954?logo=spotify&logoColor=white)
 
 ## Setup
 ### Prerequisites
