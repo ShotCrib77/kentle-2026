@@ -1,5 +1,5 @@
 # Kentle
-A music quiz app with Kent theme, songs gotten with Spotift API
+A music quiz app with Kent theme, songs gotten with Spotift API.
 Available at: [kentle.shotcrib.com](https://kentle.shotcrib.com)
 --------------------------------------------------------------------
 ## Demo
@@ -20,7 +20,7 @@ Connect to your Spotify (premium) account. Then you can play a music quiz where,
 ![Nginx](https://img.shields.io/badge/Nginx-009639?logo=nginx&logoColor=white)
 
 ## Data
-![Spotify](https://img.shields.io/badge/Spotify%20API-1DB954?logo=spotify&logoColor=white)
+![Spotify](https://img.shields.io/badge/Spotify%20Web%20SDK-1DB954?logo=spotify&logoColor=white)
 
 ## Setup
 ### Prerequisites
@@ -30,11 +30,12 @@ Connect to your Spotify (premium) account. Then you can play a music quiz where,
 ```bash
 git clone https://github.com/ShotCrib77/kentle-2026 kentle
 cd dulolytics
-cp .env.example .env
+cp .env.build.example .env.build
+cp .env.runtime.example .env.runtime
 docker build -t kentle .
 docker run -d -p 4001:3000 --env-file .env.runtime --name kentle kentle
 ```
-Don't forget to fill in the .env file! See .env.example for reference.
+Don't forget to fill in the .env files! See .env.build.example and .env.runtime.example for reference.
 
 ## Notes
 Currently, this project has some serious limitations. Spotify unfortunetly dosen’t allow public apps like these to be shared, and the app can therefore only be used by accounts explicitly whitelisted in the Kentle dashboard, and the limit for whitelisted accounts is 5 accounts. Sadly theres no real way to get around this since Spotify explicitly states that they won’t accept small hobiyst apps and will only support larger projects and companies that they directly collaborate with, to use their API more for public use.
