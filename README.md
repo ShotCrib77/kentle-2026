@@ -3,7 +3,9 @@ A music quiz app with Kent theme, songs gotten with Spotift API.
 Available at: [kentle.shotcrib.com](https://kentle.shotcrib.com)
 --------------------------------------------------------------------
 ## Demo
-![demo](./docs/kentle-demo.gif)
+<div align="center">
+  <img src="./docs/kentle-demo.gif" width="800" alt="demo"/>
+</div>
 
 ## Screenshots
 | Start | End | Results |
