@@ -1,5 +1,5 @@
 # Kentle
-A music quiz app with Kent theme, music playback and song fetching handled with Spotift Web SDK.
+A music quiz app with Kent theme. Music playback and song fetching handled with Spotift Web SDK.
 Available at: [kentle.shotcrib.com](https://kentle.shotcrib.com)
 --------------------------------------------------------------------
 ## Demo
